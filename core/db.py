@@ -52,7 +52,7 @@ class DatabaseManager:
                 c = conn.cursor()
                 c.execute(
                     'INSERT OR REPLACE INTO states (id, market_domain, query, state_data, created_at) VALUES (?, ?, ?, ?, ?)',
-                    (state.state_id, state.market_domain, state.query, json.dumps(state_dict, default=str), datetime.now())
+                    (state.state_id, state.market_domain, state.query, json.dumps(state_dict, default=str), datetime.now().isoformat())
                 )
                 conn.commit()
                 logger.info(f"State saved: {state.state_id}")
@@ -100,7 +100,7 @@ class DatabaseManager:
                 c = conn.cursor()
                 c.execute(
                     'INSERT INTO chat_history (session_id, message_type, content, timestamp) VALUES (?, ?, ?, ?)',
-                    (session_id, message_type, content, datetime.now())
+                    (session_id, message_type, content, datetime.now().isoformat())
                 )
                 conn.commit()
         except Exception as e:
