@@ -70,3 +70,7 @@ htmlcov/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+
+# Nested clone / local duplicates
+AI-Driven-Financial-Market-Intelligence-Agent/
