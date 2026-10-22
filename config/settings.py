@@ -17,33 +17,39 @@ class Settings:
     USER_AGENT = os.getenv("USER_AGENT", "AI-Driven-Financial-Market-Intelligence-Agent")
     
     # Database
-    DATABASE_PATH = "market_intelligence.db"
+    DATABASE_PATH = os.getenv("DATABASE_PATH", "market_intelligence.db")
     
     # Directories
-    REPORTS_DIR = "reports"
-    ASSETS_DIR = "assets"
-    EXPORTS_DIR = "exports"
+    REPORTS_DIR = os.getenv("REPORTS_DIR", "reports")
+    ASSETS_DIR = os.getenv("ASSETS_DIR", "assets")
+    EXPORTS_DIR = os.getenv("EXPORTS_DIR", "exports")
     
     # Model Settings
-    LLM_MODEL = "gemini-2.0-flash"
-    GROQ_MODEL = "llama3-8b-8192"
-    EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+    LLM_MODEL = os.getenv("LLM_MODEL", "gemini-2.0-flash")
+    GROQ_MODEL = os.getenv("GROQ_MODEL", "llama3-8b-8192")
+    EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
     
     # Cache Settings
-    SEARCH_CACHE_SIZE = 100
-    SEARCH_CACHE_TTL = 3600
+    SEARCH_CACHE_SIZE = int(os.getenv("SEARCH_CACHE_SIZE", "100"))
+    SEARCH_CACHE_TTL = int(os.getenv("SEARCH_CACHE_TTL", "3600"))
     
     # Agent Settings
-    MAX_CONCURRENT_AGENTS = 4
-    AGENT_TIMEOUT = 300  # 5 minutes
+    MAX_CONCURRENT_AGENTS = int(os.getenv("MAX_CONCURRENT_AGENTS", "4"))
+    AGENT_TIMEOUT = int(os.getenv("AGENT_TIMEOUT", "300"))  # 5 minutes
     
     # Export Settings
-    PDF_TEMPLATE = "modern"
-    DOCX_TEMPLATE = "professional"
+    PDF_TEMPLATE = os.getenv("PDF_TEMPLATE", "modern")
+    DOCX_TEMPLATE = os.getenv("DOCX_TEMPLATE", "professional")
     
     # Logging
     LOG_FORMAT = '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
-    LOG_LEVEL = "INFO"
+    LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
+    
+    @classmethod
+    def ensure_directories(cls):
+        """Ensure required storage directories exist"""
+        for directory in [cls.REPORTS_DIR, cls.ASSETS_DIR, cls.EXPORTS_DIR]:
+            os.makedirs(directory, exist_ok=True)
     
     @classmethod
     def validate(cls):

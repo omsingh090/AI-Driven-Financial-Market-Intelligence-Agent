@@ -47,11 +47,12 @@ class DatabaseManager:
     def save_state(self, state: MarketIntelligenceState):
         """Save state to database"""
         try:
+            state_dict = state.model_dump() if hasattr(state, "model_dump") else state.dict()
             with sqlite3.connect(self.db_path) as conn:
                 c = conn.cursor()
                 c.execute(
                     'INSERT OR REPLACE INTO states (id, market_domain, query, state_data, created_at) VALUES (?, ?, ?, ?, ?)',
-                    (state.state_id, state.market_domain, state.query, json.dumps(state.dict()), datetime.now())
+                    (state.state_id, state.market_domain, state.query, json.dumps(state_dict, default=str), datetime.now())
                 )
                 conn.commit()
                 logger.info(f"State saved: {state.state_id}")

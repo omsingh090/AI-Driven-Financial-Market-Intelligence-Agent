@@ -1,24 +1,24 @@
 import os
 import json
 import logging
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from datetime import datetime
 import re
 
 logger = logging.getLogger(__name__)
 
-def safe_json_loads(data: str, default=None):
-    """Safely load JSON data"""
+def safe_json_loads(data: str, default: Any = None) -> Any:
+    """Safely load JSON data, returning default fallback on parse failure"""
     try:
         return json.loads(data)
     except (json.JSONDecodeError, TypeError) as e:
         logger.warning(f"Failed to parse JSON: {str(e)}")
-        return default or {}
+        return default if default is not None else {}
 
-def safe_json_dumps(data: Any, indent=2) -> str:
-    """Safely dump data to JSON"""
+def safe_json_dumps(data: Any, indent: int = 2) -> str:
+    """Safely dump data to JSON string with serialization fallback"""
     try:
-        return json.dumps(data, indent=indent, ensure_ascii=False)
+        return json.dumps(data, indent=indent, ensure_ascii=False, default=str)
     except (TypeError, ValueError) as e:
         logger.warning(f"Failed to serialize JSON: {str(e)}")
         return "{}"
@@ -43,7 +43,7 @@ def get_file_size_mb(file_path: str) -> float:
     except Exception:
         return 0.0
 
-def format_timestamp(timestamp: datetime = None) -> str:
+def format_timestamp(timestamp: Optional[datetime] = None) -> str:
     """Format timestamp for display"""
     if timestamp is None:
         timestamp = datetime.now()
